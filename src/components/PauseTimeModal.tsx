@@ -133,8 +133,8 @@ export const PauseTimeModal: React.FC<PauseTimeModalProps> = ({
           </div>
 
           {/* Quick Add Presets */}
-          <div className="grid grid-cols-4 gap-3">
-            {[15, 30, 60, 120].map((m) => (
+          <div className="grid grid-cols-3 gap-3">
+            {[5, 10, 15, 30, 60, 120].map((m) => (
                 <button
                     key={m}
                     onClick={() => {
