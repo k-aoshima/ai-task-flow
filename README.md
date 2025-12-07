@@ -11,6 +11,9 @@ AIでタスクを自動分解し、優先順位付けを行うChrome拡張アプ
 6. https://aistudio.google.com/ でAPIキーを作成　※APIキーの取得方法は[こちら](https://ai.google.dev/gemini-api/docs/api-key?hl=ja)を確認してください。無料で発行可能です。
 7. AI TaskFlowに戻り、取得したGemini APIキーを設定にいれてください
 
+スタートガイドは[こちら](https://github.com/k-aoshima/ai-task-flow/blob/main/AI_TaskFlow_Guide.pdf) ※NotebookLMによって作成されているため実際のアプリと若干の誤差があります。
+
+
 ## プロジェクト構造
 
 ```
