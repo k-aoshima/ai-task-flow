@@ -26,6 +26,12 @@ export const Header: React.FC<HeaderProps> = ({ customizationToggle }) => {
         </div>
       </div>
       <div className="flex items-center space-x-1">
+        {customizationToggle && (
+          <>
+            {customizationToggle}
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1"></div>
+          </>
+        )}
         <Link
           to="/"
           className={`p-2 text-gray-600 dark:text-[#8b949e] hover:text-gray-900 dark:hover:text-[#c9d1d9] hover:bg-gray-100 dark:hover:bg-[#30363d] rounded-md transition-colors duration-200 ${
@@ -56,12 +62,6 @@ export const Header: React.FC<HeaderProps> = ({ customizationToggle }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
         </Link>
-        {customizationToggle && (
-          <>
-            <div className="w-px h-6 bg-gray-300 dark:bg-gray-700 mx-1"></div>
-            {customizationToggle}
-          </>
-        )}
       </div>
     </div>
   );
