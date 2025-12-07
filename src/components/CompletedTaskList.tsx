@@ -1,5 +1,5 @@
 import React from 'react';
-import { Task, TabContext, TimerData } from '../types';
+import { Task, TabContext, TimerData, DomainPattern } from '../types';
 import { TaskCard } from './TaskCard';
 
 interface CompletedTaskListProps {
@@ -20,6 +20,7 @@ interface CompletedTaskListProps {
   resplittingTaskId: string | null;
   getRemainingTime: (taskId: string) => import('../types').RemainingTime;
   onCancelTimer: (taskId: string) => void;
+  domainPatterns?: DomainPattern[];
 }
 
 export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
@@ -40,6 +41,7 @@ export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
   resplittingTaskId,
   getRemainingTime,
   onCancelTimer,
+  domainPatterns,
 }) => {
   const formatTime = (minutes: number) => {
     if (minutes < 60) {
@@ -214,6 +216,7 @@ export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
                     isResplitting={resplittingTaskId === task.id}
                     getRemainingTime={getRemainingTime}
                     onCancelTimer={onCancelTimer}
+                    domainPatterns={domainPatterns}
                   />
                 </div>
               ))}

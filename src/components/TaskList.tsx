@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TaskCard } from './TaskCard';
 import { TaskGroup } from './TaskGroup';
-import { Task, TabContext, TimerData } from '../types';
+import { Task, TabContext, TimerData, DomainPattern } from '../types';
 import { useTaskDisplayList } from '../hooks/useTaskDisplayList';
 
 interface TaskListProps {
@@ -32,6 +32,7 @@ interface TaskListProps {
   useGrouping?: boolean;
   allTasks?: Task[];
   suggestedTaskIds?: Set<string>;
+  domainPatterns?: DomainPattern[];
 }
 
 /**
@@ -65,6 +66,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   useGrouping = false,
   allTasks = [],
   suggestedTaskIds = new Set(),
+  domainPatterns,
 }) => {
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -216,6 +218,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                     isSuggested={suggestedTaskIds?.has(task.id)}
                     getRemainingTime={getRemainingTime}
                     onCancelTimer={onCancelTimer}
+                    domainPatterns={domainPatterns}
                   />
                 </div>
               );
@@ -256,6 +259,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                   onReorderParentGroup={onReorderParentGroup}
                   onReorderBetweenGroupAndTask={onReorderBetweenGroupAndTask}
                   setDragOverIndex={setDragOverIndex}
+                  domainPatterns={domainPatterns}
                 />
               );
             }
@@ -318,6 +322,7 @@ export const TaskList: React.FC<TaskListProps> = ({
               isSuggested={suggestedTaskIds?.has(task.id)}
               getRemainingTime={getRemainingTime}
               onCancelTimer={onCancelTimer}
+              domainPatterns={domainPatterns}
             />
             </div>
             ))

@@ -408,6 +408,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
             resplittingTaskId={resplittingTaskId}
             getRemainingTime={getRemainingTime}
             onCancelTimer={cancelTimer}
+            domainPatterns={domainPatterns}
           />
         );
 
@@ -439,6 +440,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
                 suggestedTaskIds={suggestedTaskIds}
                 getRemainingTime={getRemainingTime}
                 onCancelTimer={cancelTimer}
+                domainPatterns={domainPatterns}
             />
           </div>
         );
@@ -471,6 +473,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
                 suggestedTaskIds={suggestedTaskIds}
                 getRemainingTime={getRemainingTime}
                 onCancelTimer={cancelTimer}
+                domainPatterns={domainPatterns}
             />
           </div>
         ) : null;

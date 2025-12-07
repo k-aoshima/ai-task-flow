@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Task, TabContext, TimerData } from '../types';
+import { Task, TabContext, TimerData, DomainPattern } from '../types';
 import { TaskCard } from './TaskCard';
 
 interface TaskGroupProps {
@@ -34,6 +34,7 @@ interface TaskGroupProps {
   onReorderParentGroup?: (draggedParentName: string, targetParentName: string) => void;
   onReorderBetweenGroupAndTask?: (draggedParentName: string | null, draggedTaskId: string | null, targetParentName: string | null, targetTaskId: string | null) => void;
   setDragOverIndex: (index: number | null) => void;
+  domainPatterns?: DomainPattern[];
 }
 
 export const TaskGroup: React.FC<TaskGroupProps> = ({
@@ -65,7 +66,8 @@ export const TaskGroup: React.FC<TaskGroupProps> = ({
   onReorderUnified,
   onReorderParentGroup,
   onReorderBetweenGroupAndTask,
-  setDragOverIndex
+  setDragOverIndex,
+  domainPatterns,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [parentNameValue, setParentNameValue] = useState(parentName);
@@ -287,6 +289,7 @@ export const TaskGroup: React.FC<TaskGroupProps> = ({
                   isSuggested={suggestedTaskIds?.has(task.id)}
                   getRemainingTime={getRemainingTime}
                   onCancelTimer={onCancelTimer}
+                  domainPatterns={domainPatterns}
                 />
               </div>
             ))}

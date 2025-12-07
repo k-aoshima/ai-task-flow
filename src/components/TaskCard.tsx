@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { calculateAIScore } from '../utils/calculateAIScore';
-import { Task, TabContext, TimerData, RemainingTime } from '../types';
+import { Task, TabContext, TimerData, RemainingTime, DomainPattern } from '../types';
 import { CONTEXT_OPTIONS } from '../constants/contextKeys';
 
 interface TaskCardProps {
@@ -25,6 +25,7 @@ interface TaskCardProps {
   isSuggested?: boolean;
   getRemainingTime?: (taskId: string) => RemainingTime;
   onCancelTimer?: (taskId: string) => void;
+  domainPatterns?: DomainPattern[];
 }
 
 interface ActionButtonProps {
@@ -85,6 +86,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   isSuggested = false,
   getRemainingTime,
   onCancelTimer,
+  domainPatterns = [],
 }) => {
   const score = calculateAIScore(task, tabContext);
   const [isEditingTime, setIsEditingTime] = useState(false);
@@ -98,6 +100,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   const suggestionStyle = isSuggested 
     ? "ring-2 ring-emerald-400 dark:ring-emerald-500 shadow-[0_0_15px_rgba(52,211,153,0.4)] dark:shadow-[0_0_15px_rgba(16,185,129,0.3)] z-10 relative" 
     : "";
+
+  // コンテキストオプションを結合
+  const contextOptions = [
+    ...CONTEXT_OPTIONS,
+    ...domainPatterns.map(p => ({ value: p.name, label: p.name }))
+  ];
 
   const handleDragStart = (e: React.DragEvent) => {
     e.dataTransfer.effectAllowed = 'move';
@@ -317,7 +325,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                     autoFocus
                     onClick={(e) => e.stopPropagation()}
                   >
-                    {CONTEXT_OPTIONS.map((option) => (
+                    {contextOptions.map((option) => (
                       <option key={option.value} value={option.value}>
                         {option.label}
                       </option>
