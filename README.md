@@ -2,6 +2,9 @@
 
 AIでタスクを自動分解し、優先順位付けを行うChrome拡張アプリケーション。
 
+<img width="1034" height="528" alt="スクリーンショット 2025-12-08 午前1 18 49" src="https://github.com/user-attachments/assets/8b613d8e-1f80-48c2-bed7-c2dda1fc0036" />
+<img width="983" height="546" alt="スクリーンショット 2025-12-08 午前1 17 40" src="https://github.com/user-attachments/assets/3e7175fd-9418-4c3f-961c-ffe14efa872e" />
+
 ## 🚀Chrome拡張機能クイックスタート
 1. [ai-task-flow.zip](https://github.com/k-aoshima/ai-task-flow/blob/main/ai-task-flow.zip)をダウンロードし、解凍
 2. google chromeの設定から「拡張機能」> 「拡張機能を管理」
@@ -11,6 +14,8 @@ AIでタスクを自動分解し、優先順位付けを行うChrome拡張アプ
 6. https://aistudio.google.com/ でAPIキーを作成　※APIキーの取得方法は[こちら](https://ai.google.dev/gemini-api/docs/api-key?hl=ja)を確認してください。無料で発行可能です。
 7. AI TaskFlowに戻り、取得したGemini APIキーを設定にいれてください
 
+具体的な使用方法は[こちら](https://github.com/k-aoshima/ai-task-flow/blob/main/AI_TaskFlow.pdf)
+※[NotebookLM](https://notebooklm.google.com/)で作成。実際のアプリケーションとは異なる部分があります。
 
 ## プロジェクト構造
 
