@@ -34,6 +34,7 @@ export interface TimerData {
   endTime: number;
   duration: number;
   originalTask: Task;
+  hasExpired?: boolean;
 }
 
 /**

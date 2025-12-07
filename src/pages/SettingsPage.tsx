@@ -9,6 +9,7 @@ export const SettingsPage: React.FC = () => {
   const [geminiApiKey, setGeminiApiKey] = useLocalStorageString('aiTaskFlow_apiKey', '');
   const [preferredModel, setPreferredModel] = useLocalStorageString('aiTaskFlow_preferredModel', 'gemini-1.5-flash');
   const [autoSwitchModels, setAutoSwitchModels] = useLocalStorage('aiTaskFlow_autoSwitchModels', true);
+  const [debugMode, setDebugMode] = useLocalStorage('aiTaskFlow_debugMode', false);
 
   return (
     <Settings 
@@ -18,6 +19,8 @@ export const SettingsPage: React.FC = () => {
       onPreferredModelChange={setPreferredModel}
       autoSwitchModels={autoSwitchModels}
       onAutoSwitchModelsChange={setAutoSwitchModels}
+      debugMode={debugMode}
+      onDebugModeChange={setDebugMode}
     />
   );
 };

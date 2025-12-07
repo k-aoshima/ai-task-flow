@@ -23,7 +23,10 @@
     "storage",
     "tabs",
     "activeTab",
-    "sidePanel"
+    "sidePanel",
+    "notifications",
+    "alarms",
+    "offscreen"
   ],
   "background": {
     "service_worker": "background.js"

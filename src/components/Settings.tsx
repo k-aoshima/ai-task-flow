@@ -9,6 +9,8 @@ interface SettingsProps {
   onPreferredModelChange: (model: string) => void;
   autoSwitchModels: boolean;
   onAutoSwitchModelsChange: (autoSwitch: boolean) => void;
+  debugMode: boolean;
+  onDebugModeChange: (debug: boolean) => void;
 }
 
 const AVAILABLE_MODELS = [
@@ -30,7 +32,9 @@ export const Settings: React.FC<SettingsProps> = ({
   preferredModel,
   onPreferredModelChange,
   autoSwitchModels,
-  onAutoSwitchModelsChange
+  onAutoSwitchModelsChange,
+  debugMode,
+  onDebugModeChange
 }) => {
   const {
     patterns,
@@ -109,6 +113,29 @@ export const Settings: React.FC<SettingsProps> = ({
               </div>
               <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
                 API制限(429)や過負荷時に、自動的に他の利用可能なモデルを試行します。
+              </p>
+            </div>
+
+            <div className="flex flex-col">
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                デバッグ設定
+              </label>
+              <div className="flex items-center h-full">
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    className="sr-only peer"
+                    checked={debugMode}
+                    onChange={(e) => onDebugModeChange(e.target.checked)}
+                  />
+                  <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>
+                  <span className="ml-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+                    [Debug] タイマーを5秒に短縮
+                  </span>
+                </label>
+              </div>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                開発用設定：すべての新規タイマーを5秒で完了させます。
               </p>
             </div>
           </div>

@@ -231,17 +231,22 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   // タイマー中かどうかをチェック
   const hasActiveTimer = !!timerData && timerData.taskId === task.id;
+  
+  // 期限切れチェック
+  const isExpired = hasActiveTimer && timerData?.hasExpired;
 
   return (
     <div className="relative group">
       {/* タスクカード */}
       <div
         className={`bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-xl relative transition-all duration-150 ${
-          hasActiveTimer 
-            ? 'ring-2 ring-amber-400 dark:ring-amber-500 shadow-[0_0_20px_rgba(251,191,36,0.5)] dark:shadow-[0_0_20px_rgba(245,158,11,0.4)] border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/20'
-            : task.isTopPriority 
-              ? 'ring-2 ring-red-400/50 dark:ring-red-500/50 shadow-red-100 dark:shadow-none' 
-              : 'hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md'
+          isExpired 
+            ? 'ring-2 ring-amber-500 shadow-[0_0_20px_rgba(251,191,36,0.5)] border-amber-400 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/20'
+            : hasActiveTimer 
+              ? 'ring-2 ring-amber-400 dark:ring-amber-500 shadow-[0_0_20px_rgba(251,191,36,0.5)] dark:shadow-[0_0_20px_rgba(245,158,11,0.4)] border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/20'
+              : task.isTopPriority 
+                ? 'ring-2 ring-red-400/50 dark:ring-red-500/50 shadow-red-100 dark:shadow-none' 
+                : 'hover:border-blue-300 dark:hover:border-blue-700 hover:shadow-md'
         } ${isDragging ? 'opacity-50 scale-95' : ''} ${
           isDragOver ? 'ring-2 ring-blue-500 scale-[1.02]' : ''
         } ${onDragStart ? 'cursor-grab active:cursor-grabbing' : ''} ${
@@ -269,8 +274,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           <div className="flex-1 min-w-0 space-y-2">
             <div>
                  {hasActiveTimer && (
-                    <span className="inline-block px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 mb-1.5 mr-1.5 border border-amber-200 dark:border-amber-500/30">
-                        ⏸️ 保留中
+                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase mb-1.5 mr-1.5 border ${
+                        isExpired 
+                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 border-amber-200 dark:border-amber-500/30 animate-pulse'
+                        : 'bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-300 border-amber-200 dark:border-amber-500/30'
+                    }`}>
+                        {isExpired ? '▶️ 再開してください' : '⏸️ 保留中'}
                     </span>
                  )}
                  {isSuggested && (
@@ -466,16 +475,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <div className="bg-amber-50/50 dark:bg-amber-900/10 rounded-lg p-3 space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                  <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                    保留タイマー実行中
+                  <div className={`w-2 h-2 rounded-full animate-pulse bg-amber-500`}></div>
+                  <span className={`text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400`}>
+                    {isExpired ? 'タイムアップ！' : '保留タイマー実行中'}
                   </span>
                 </div>
               </div>
               
               {/* Timer Display */}
               <div className="text-center py-2">
-                {!isTimerRevealed ? (
+                {!isTimerRevealed && !isExpired ? (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -492,18 +501,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                 ) : (
                   <div 
                     className="cursor-pointer group/timer relative"
-                    onClick={() => setIsTimerRevealed(false)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // 期限切れでない場合のみ隠せる
+                        if (!isExpired) setIsTimerRevealed(false);
+                    }}
                   >
-                    <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 font-mono tracking-tight tabular-nums relative z-10 mx-auto w-fit">
-                      {(() => {
+                    <div className={`text-3xl font-bold font-mono tracking-tight tabular-nums relative z-10 mx-auto w-fit text-slate-800 dark:text-slate-100`}>
+                      {isExpired ? '0:00' : (() => {
                         const remaining = getRemainingTime(task.id);
                         return `${remaining.minutes}:${remaining.seconds.toString().padStart(2, '0')}`;
                       })()}
-                      <div className="absolute -right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover/timer:opacity-100 transition-opacity text-slate-400">
-                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                         </svg>
-                      </div>
+                      {!isExpired && (
+                        <div className="absolute -right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover/timer:opacity-100 transition-opacity text-slate-400">
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                            </svg>
+                        </div>
+                      )}
                     </div>
                     <div className="text-xs font-medium text-slate-400 uppercase tracking-widest mt-1">
                       残り時間
@@ -513,7 +528,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               </div>
 
               {/* Progress Bar - Only visible when revealed */}
-              <div className={`w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden transition-all duration-300 ${isTimerRevealed ? 'opacity-100 max-h-2' : 'opacity-0 max-h-0'}`}>
+              <div className={`w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden transition-all duration-300 ${isTimerRevealed || isExpired ? 'opacity-100 max-h-2' : 'opacity-0 max-h-0'}`}>
                 <div
                   className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-1000 ease-linear"
                   style={{ width: `${getRemainingTime(task.id).progress}%` }}
