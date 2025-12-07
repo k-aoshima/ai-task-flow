@@ -13,6 +13,7 @@ interface TaskCardProps {
   onUpdateTime: (taskId: string, time: number) => void;
   onUpdateContext?: (taskId: string, contextKey: string) => void;
   onUpdateName?: (taskId: string, newName: string) => void;
+  onRestore?: (taskId: string) => void;
   onResplit?: (task: Task) => void;
   onToggleCheck?: (taskId: string) => void;
   onDragStart?: (e: React.DragEvent) => void;
@@ -76,6 +77,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onUpdateContext,
   onUpdateName,
   onResplit,
+  onRestore,
   onToggleCheck,
   onDragStart,
   onDragEnd,
@@ -409,6 +411,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                       hoverClass="hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20"
                   />
               )}
+              {task.status === 'completed' && onRestore && (
+                  <ActionButton
+                      onClick={() => onRestore(task.id)}
+                      icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>}
+                      label="未完了に戻す"
+                      colorClass="text-blue-500"
+                      bgClass="bg-blue-50 dark:bg-blue-900/20"
+                      hoverClass="hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                  />
+              )}
               <ActionButton
                 onClick={() => onDelete(task.id)}
                 icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>}
@@ -454,6 +466,16 @@ export const TaskCard: React.FC<TaskCardProps> = ({
                         colorClass="text-amber-500"
                         bgClass="bg-amber-50 dark:bg-amber-900/20"
                         hoverClass="hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                    />
+                )}
+                {task.status === 'completed' && onRestore && (
+                    <ActionButton
+                        onClick={() => onRestore(task.id)}
+                        icon={<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>}
+                        label="未完了に戻す"
+                        colorClass="text-blue-500"
+                        bgClass="bg-blue-50 dark:bg-blue-900/20"
+                        hoverClass="hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20"
                     />
                 )}
                 <ActionButton

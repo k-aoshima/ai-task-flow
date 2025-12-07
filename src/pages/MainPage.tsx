@@ -34,7 +34,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
   // カスタムフック
   const { tasks, setTasks, addTasks, deleteTask, updateTask, deleteTasks } = useTasks();
   const { timersData, startTimer, cancelTimer, getRemainingTime } = useTimer();
-  const { handleReorder } = useTaskDragDrop(tasks, setTasks);
+  const { handleReorder, handleReorderChild } = useTaskDragDrop(tasks, setTasks);
   const [geminiApiKey] = useLocalStorageString('aiTaskFlow_apiKey', '');
   const tabContext = useTabContext();
   const { patterns: domainPatterns } = useDomainPatterns();
@@ -102,6 +102,11 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
     if (hasTimer) {
       cancelTimer(taskId);
     }
+  };
+
+  // タスクを未完了に戻す
+  const handleRestoreTask = (taskId: string) => {
+    updateTask(taskId, { status: 'active' });
   };
 
   // 複数タスクを一括で完了にする
@@ -399,6 +404,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
             onCompleteTasks={handleCompleteTasks}
             onMoveToCompleted={handleMoveToCompleted}
             onReorder={(taskId, index, list) => handleReorder(taskId, index, list)}
+            onRestore={handleRestoreTask}
             onPause={handlePauseTask}
             onDelete={handleDeleteTask}
             onComplete={handleCompleteTask}
@@ -432,6 +438,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
                 onToggleCheck={handleToggleCheck}
                 onReorder={(taskId, newIndex) => handleMoveTask(taskId, 'task', newIndex, true)}
                 onReorderUnified={(id, type, index) => handleMoveTask(id, type, index, true)}
+                onReorderChild={handleReorderChild}
                 title="🚀 実行中のタスク"
                 enableDragAndDrop={!isCustomizing}
                 resplittingTaskId={resplittingTaskId}
@@ -446,7 +453,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
         );
 
       case 'allTaskList':
-        return sortedTasks.length > 0 ? (
+        return (
            <div key="allTaskList" className="animate-enter">
             <TaskList
                 tasks={sortedTasks}
@@ -465,6 +472,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
                 onToggleCheck={handleToggleCheck}
                 onReorder={(taskId, newIndex) => handleMoveTask(taskId, 'task', newIndex, false)}
                 onReorderUnified={(id, type, index) => handleMoveTask(id, type, index, false)}
+                onReorderChild={handleReorderChild}
                 title="全タスクリスト"
                 enableDragAndDrop={!isCustomizing}
                 resplittingTaskId={resplittingTaskId}
@@ -476,7 +484,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onCustomizationToggleReady }
                 domainPatterns={domainPatterns}
             />
           </div>
-        ) : null;
+        );
 
       default:
         return null;

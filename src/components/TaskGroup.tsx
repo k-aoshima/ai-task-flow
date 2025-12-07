@@ -31,6 +31,7 @@ interface TaskGroupProps {
   
   // Drag and Drop props
   onReorderUnified?: (draggedItemId: string, draggedItemType: 'group' | 'task', newIndex: number) => void;
+  onReorderChild?: (draggedTaskId: string, newIndex: number) => void;
   onReorderParentGroup?: (draggedParentName: string, targetParentName: string) => void;
   onReorderBetweenGroupAndTask?: (draggedParentName: string | null, draggedTaskId: string | null, targetParentName: string | null, targetTaskId: string | null) => void;
   setDragOverIndex: (index: number | null) => void;
@@ -64,6 +65,7 @@ export const TaskGroup: React.FC<TaskGroupProps> = ({
   allTasks,
   suggestedTaskIds = new Set(),
   onReorderUnified,
+  onReorderChild,
   onReorderParentGroup,
   onReorderBetweenGroupAndTask,
   setDragOverIndex,
@@ -105,7 +107,39 @@ export const TaskGroup: React.FC<TaskGroupProps> = ({
       handleParentNameBlur();
     } else if (e.key === 'Escape') {
       setIsEditing(false);
-      setParentNameValue(parentName);
+    }
+  };
+
+  const [dragOverChildId, setDragOverChildId] = useState<string | null>(null);
+
+  const handleChildDragStart = (e: React.DragEvent, taskId: string) => {
+    e.stopPropagation();
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', taskId);
+    e.dataTransfer.setData('isChildTask', 'true');
+    e.dataTransfer.setData('parentGroupName', parentName);
+  };
+
+  const handleChildDragOver = (e: React.DragEvent, taskId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.dataTransfer.dropEffect = 'move';
+    if (dragOverChildId !== taskId) {
+      setDragOverChildId(taskId);
+    }
+  };
+
+  const handleChildDrop = (e: React.DragEvent, targetTaskId: string, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverChildId(null);
+    
+    const draggedTaskId = e.dataTransfer.getData('text/plain');
+    const isChildTask = e.dataTransfer.getData('isChildTask') === 'true';
+    const draggedParentName = e.dataTransfer.getData('parentGroupName');
+
+    if (isChildTask && draggedParentName === parentName && draggedTaskId !== targetTaskId && onReorderChild) {
+      onReorderChild(draggedTaskId, index);
     }
   };
 
@@ -269,8 +303,18 @@ export const TaskGroup: React.FC<TaskGroupProps> = ({
       {isExpanded && (
         <div className="p-2 bg-slate-50/50 dark:bg-slate-900/20 border-t border-slate-100 dark:border-slate-700/50">
           <div className="space-y-2 pl-3 border-l-2 border-slate-200 dark:border-slate-700 ml-1">
-            {sortedGroupTasks.map((task) => (
-              <div key={task.id}>
+            {sortedGroupTasks.map((task, idx) => (
+              <div 
+                key={task.id}
+                draggable={enableDragAndDrop}
+                onDragStart={enableDragAndDrop ? (e) => handleChildDragStart(e, task.id) : undefined}
+                onDragOver={enableDragAndDrop ? (e) => handleChildDragOver(e, task.id) : undefined}
+                onDragLeave={enableDragAndDrop ? () => setDragOverChildId(null) : undefined}
+                onDrop={enableDragAndDrop ? (e) => handleChildDrop(e, task.id, idx) : undefined}
+                className={`transition-all duration-200 rounded-lg ${
+                    dragOverChildId === task.id ? 'border-t-2 border-blue-500 pt-2' : ''
+                }`}
+              >
                 <TaskCard
                   task={task}
                   tabContext={tabContext}

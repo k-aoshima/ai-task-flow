@@ -117,7 +117,7 @@ export const TaskDecomposer: React.FC<TaskDecomposerProps> = ({
           <textarea
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="1行に1つずつタスクを入力してください&#10;&#10;例:&#10;ユーザー認証機能を実装&#10;データベースの設計"
+            placeholder="1日で完了するタスクを1行に1つずつ入力してください&#10;&#10;例:&#10;ユーザー認証機能を実装&#10;山田さんにメールを送信する"
             rows={6}
             className="input-field resize-y min-h-[120px] shadow-inner bg-slate-50/50 dark:bg-slate-900/50 focus:bg-white dark:focus:bg-slate-800"
             disabled={isLoading}

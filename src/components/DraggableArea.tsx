@@ -18,7 +18,7 @@ interface DraggableAreaProps {
 const AREA_NAMES: Record<LayoutAreaType, string> = {
   tabContext: 'タブコンテキスト',
   timeSummary: '時間サマリー',
-  taskDecomposer: 'タスク分解フォーム',
+  taskDecomposer: 'タスク作成フォーム',
   completedList: '完了リスト',
   currentTaskList: '実行中のタスク',
   allTaskList: '全タスクリスト',

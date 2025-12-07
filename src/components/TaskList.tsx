@@ -22,6 +22,7 @@ interface TaskListProps {
   onReorderParentGroup?: (draggedParentName: string, targetParentName: string) => void;
   onReorderBetweenGroupAndTask?: (draggedParentName: string | null, draggedTaskId: string | null, targetParentName: string | null, targetTaskId: string | null) => void;
   onReorderUnified?: (draggedItemId: string, draggedItemType: 'group' | 'task', newIndex: number) => void;
+  onReorderChild?: (draggedTaskId: string, newIndex: number) => void;
   onToggleCheck?: (taskId: string) => void;
   getRemainingTime?: (taskId: string) => import('../types').RemainingTime;
   onCancelTimer?: (taskId: string) => void;
@@ -56,6 +57,7 @@ export const TaskList: React.FC<TaskListProps> = ({
   onReorderParentGroup,
   onReorderBetweenGroupAndTask,
   onReorderUnified,
+  onReorderChild,
   onToggleCheck,
   getRemainingTime,
   onCancelTimer,
@@ -256,6 +258,7 @@ export const TaskList: React.FC<TaskListProps> = ({
                   allTasks={allTasks}
                   suggestedTaskIds={suggestedTaskIds}
                   onReorderUnified={onReorderUnified}
+                  onReorderChild={onReorderChild}
                   onReorderParentGroup={onReorderParentGroup}
                   onReorderBetweenGroupAndTask={onReorderBetweenGroupAndTask}
                   setDragOverIndex={setDragOverIndex}

@@ -20,6 +20,7 @@ interface CompletedTaskListProps {
   resplittingTaskId: string | null;
   getRemainingTime: (taskId: string) => import('../types').RemainingTime;
   onCancelTimer: (taskId: string) => void;
+  onRestore: (taskId: string) => void;
   domainPatterns?: DomainPattern[];
 }
 
@@ -41,6 +42,7 @@ export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
   resplittingTaskId,
   getRemainingTime,
   onCancelTimer,
+  onRestore,
   domainPatterns,
 }) => {
   const formatTime = (minutes: number) => {
@@ -91,7 +93,7 @@ export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
         )}
       </div>
       <div
-        className="min-h-[120px] max-h-[300px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/30 overflow-y-auto transition-all duration-200 custom-scrollbar"
+        className="max-h-[300px] border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-3 bg-slate-50/50 dark:bg-slate-900/30 overflow-y-auto transition-all duration-200 custom-scrollbar"
         onDragOver={(e) => {
           e.preventDefault();
           e.dataTransfer.dropEffect = 'move';
@@ -130,9 +132,8 @@ export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
         }}
       >
         {sortedCompletedTasks.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-slate-400 dark:text-slate-500 py-8">
-            <svg className="w-12 h-12 mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7"/></svg>
-            <div className="text-sm font-medium">完了したタスクをここにドラッグしてください</div>
+          <div className="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 py-4">
+            <div className="text-sm font-medium">完了したタスクをここにドラッグ</div>
           </div>
         ) : (
           <>
@@ -216,6 +217,7 @@ export const CompletedTaskList: React.FC<CompletedTaskListProps> = ({
                     isResplitting={resplittingTaskId === task.id}
                     getRemainingTime={getRemainingTime}
                     onCancelTimer={onCancelTimer}
+                    onRestore={onRestore}
                     domainPatterns={domainPatterns}
                   />
                 </div>
