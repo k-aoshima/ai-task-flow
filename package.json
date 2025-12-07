@@ -5,7 +5,7 @@
   "description": "AI TaskFlow - AIでタスクを自動分解するChrome拡張",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cd dist && zip -r ../ai-task-flow.zip .",
     "preview": "vite preview"
   },
   "dependencies": {
