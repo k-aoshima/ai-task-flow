@@ -2,13 +2,13 @@
 
 AIでタスクを自動分解し、優先順位付けを行うChrome拡張アプリケーション。
 
-## Chrome拡張機能クイックスタート🚀
+## 🚀Chrome拡張機能クイックスタート
 1. ai-task-flow.zipをダウンロードし、解凍
 2. google chromeの設定から「拡張機能」> 「拡張機能を管理」
 3. 拡張機能を管理ページの右上に「ディベロッパーモード」のトグルがあるのでONにする
 4. 画面左上に「パッケージ化されていない拡張機能を読み込む」があるのでクリックし、1で解凍したフォルダを選択する
 5. 拡張機能が追加されるので、AI TaskFlowを開き画面右上の設定ボタンをクリックする
-6. https://aistudio.google.com/ でAPIキーを作成　※APIキーの取得方法は[こちら](https://ai.google.dev/gemini-api/docs/api-key?hl=ja)を確認してください
+6. https://aistudio.google.com/ でAPIキーを作成　※APIキーの取得方法は[こちら](https://ai.google.dev/gemini-api/docs/api-key?hl=ja)を確認してください。無料で発行可能です。
 7. AI TaskFlowに戻り、取得したGemini APIキーを設定にいれてください
 
 ## プロジェクト構造
