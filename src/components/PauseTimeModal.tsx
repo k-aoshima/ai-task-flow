@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 interface PauseTimeModalProps {
   isOpen: boolean;
@@ -18,6 +19,14 @@ export const PauseTimeModal: React.FC<PauseTimeModalProps> = ({
 }) => {
   const [minutes, setMinutes] = useState<string>('30');
   const [hours, setHours] = useState<string>('0');
+  const [enableTimerNotifications, setEnableTimerNotifications] = useLocalStorage('aiTaskFlow_enableTimerNotifications', true);
+
+  // Sync to chrome storage for background script access
+  useEffect(() => {
+    if ((chrome as any)?.storage?.local) {
+      (chrome as any).storage.local.set({ aiTaskFlow_enableTimerNotifications: enableTimerNotifications });
+    }
+  }, [enableTimerNotifications]);
 
   if (!isOpen) return null;
 
@@ -144,8 +153,29 @@ export const PauseTimeModal: React.FC<PauseTimeModalProps> = ({
                     className="py-2 text-sm font-semibold bg-white/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-900/20 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 transition-all active:scale-95"
                 >
                     +{m >= 60 ? `${m/60}h` : `${m}m`}
-                </button>
+                  </button>
             ))}
+          </div>
+
+          {/* Timer Options */}
+          <div className="flex items-center justify-between px-2">
+            <div className="flex flex-col">
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                    完了時の通知
+                </span>
+                <span className="text-xs text-slate-500 dark:text-slate-400">
+                    ポップアップと音声を有効にする
+                </span>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                type="checkbox" 
+                className="sr-only peer"
+                checked={enableTimerNotifications}
+                onChange={(e) => setEnableTimerNotifications(e.target.checked)}
+                />
+                <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            </label>
           </div>
 
           <div className="flex gap-4 pt-4 border-t border-slate-100 dark:border-slate-800/50">

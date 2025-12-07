@@ -59,6 +59,15 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     }
   }
 
+  // 通知設定を確認
+  const settings = await chrome.storage.local.get(['aiTaskFlow_enableTimerNotifications']);
+  const enableNotifications = settings.aiTaskFlow_enableTimerNotifications !== false; // デフォルトはtrue
+
+  if (!enableNotifications) {
+      console.log("Timer notifications are disabled by user.");
+      return;
+  }
+
   // 1. 音声を再生 (Offscreen Document経由)
   try {
       await setupOffscreenDocument(OFFSCREEN_DOCUMENT_PATH);
